@@ -172,6 +172,16 @@ static NSMutableArray *modalSheets = nil;
 
 -(IBAction)backgroundTouched:(id)sender
 {
+  if([sender isKindOfClass:[UIGestureRecognizer class]])
+  {
+    UIGestureRecognizer* gestureRecignizer = (UIGestureRecognizer*)sender;
+    
+    CGPoint point = [gestureRecignizer locationInView:childContentVC.view];
+    
+    if (CGRectContainsPoint(childContentVC.view.bounds, point))
+      return;
+  }
+    
   // Let the delegate know the user touched outside the child content area.
   if ([self.delegate respondsToSelector:@selector(modalSheetTouchedOutsideContent:)])
   {
