@@ -172,11 +172,11 @@ static NSMutableArray *modalSheets = nil;
 
 -(IBAction)backgroundTouched:(id)sender
 {
-  if([sender isKindOfClass:[UIGestureRecognizer class]])
+  if ([sender isKindOfClass:[UIGestureRecognizer class]])
   {
-    UIGestureRecognizer* gestureRecignizer = (UIGestureRecognizer*)sender;
+    UIGestureRecognizer* gestureRecognizer = (UIGestureRecognizer*)sender;
     
-    CGPoint point = [gestureRecignizer locationInView:childContentVC.view];
+    CGPoint point = [gestureRecognizer locationInView:childContentVC.view];
     
     if (CGRectContainsPoint(childContentVC.view.bounds, point))
       return;
