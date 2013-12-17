@@ -1,0 +1,30 @@
+# Xcode
+build/*
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+DerivedData
+
+# OS X
+[Tt]humbs.db
+.DS_Store
+profile
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+
+# Cocoa Pods
+Pods/
+Podfile.lock
