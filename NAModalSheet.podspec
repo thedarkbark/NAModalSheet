@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name = 'NAModalSheet'
   s.version = '0.0.1'
   s.license = 'MIT'
-  s.summary = 'Create google analytics tracker view name from plist file.'
+  s.summary = 'Presents your view controller with a blurred image of the background behind it.'
   s.homepage = 'https://github.com/thedarkbark/NAModalSheet'
   
   s.requires_arc = true
