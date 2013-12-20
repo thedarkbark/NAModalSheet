@@ -60,6 +60,8 @@ static NSMutableArray *modalSheets = nil;
 
 - (void)loadView
 {
+  CGFloat cornerRadius = self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered ? self.cornerRadiusWhenCentered : 0.0;
+  
   myWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   myWindow.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
   myWindow.opaque = NO;
@@ -97,6 +99,7 @@ static NSMutableArray *modalSheets = nil;
   childContainerContainer.backgroundColor = [UIColor clearColor];
   childContainerContainer.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
   childContainerContainer.clipsToBounds = YES;
+  childContainerContainer.layer.cornerRadius = cornerRadius;
   [mainView addSubview:childContainerContainer];
   
   UITapGestureRecognizer *childContainerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTouched:)];
@@ -131,6 +134,7 @@ static NSMutableArray *modalSheets = nil;
   childContainer = [[UIView alloc] initWithFrame:childContainerRect];
   childContainer.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
   childContainer.clipsToBounds = YES;
+  childContainer.layer.cornerRadius = cornerRadius;
   childContainer.backgroundColor = [UIColor clearColor];
   [childContainerContainer addSubview:childContainer];
   
@@ -140,6 +144,7 @@ static NSMutableArray *modalSheets = nil;
   CGRect blurredBackgroundRect = [childContainer convertRect:mainView.bounds fromView:mainView];
   blurredBackground = [[UIView alloc] initWithFrame:blurredBackgroundRect];
   blurredBackground.clipsToBounds = YES;
+  blurredBackground.layer.cornerRadius = cornerRadius;
   UIViewAutoresizing blurredBackgroundAutoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
   if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
   {
@@ -156,6 +161,7 @@ static NSMutableArray *modalSheets = nil;
   
   blurredImageView = [[UIImageView alloc] initWithFrame:blurredBackground.bounds];
   blurredImageView.autoresizingMask = blurredBackgroundAutoresizingMask;
+  blurredImageView.layer.cornerRadius = cornerRadius;
   [blurredBackground addSubview:blurredImageView];
   
   blurredBackground.frame = blurredBackgroundRect;
@@ -164,6 +170,7 @@ static NSMutableArray *modalSheets = nil;
   CGRect childViewRect = childView.frame;
   childViewRect.origin.x = childViewRect.origin.y = 0.0;
   childView.frame = childViewRect;
+  childView.layer.cornerRadius = cornerRadius;
   [childContainer addSubview:childView]; // should already be sized to fit
   childView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
   

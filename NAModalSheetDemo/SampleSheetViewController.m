@@ -23,6 +23,7 @@
   SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
   NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:style];
   svc->modalSheet = sheet;
+  sheet.cornerRadiusWhenCentered = 24.0;
   sheet.slideInset = slideInset;
   sheet.delegate = svc;
   

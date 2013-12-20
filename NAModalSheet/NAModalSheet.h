@@ -26,6 +26,7 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
 
 @property (nonatomic, weak) id<NAModalSheetDelegate> delegate;
 @property (nonatomic, assign) CGFloat slideInset;
+@property (nonatomic, assign) CGFloat cornerRadiusWhenCentered;
 
 - (instancetype)initWithViewController:(UIViewController *)vc
                      presentationStyle:(NAModalSheetPresentationStyle)style;
