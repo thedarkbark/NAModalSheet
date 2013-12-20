@@ -2,14 +2,17 @@
 
 NAModalSheet presents your view controller with a blurred image of the background behind it - tested on iOS 6 and 7, but should be deployable on iOS 5.
 
+[![Cocoapods](https://cocoapod-badges.herokuapp.com/v/NAModalSheet/badge.png)](http://beta.cocoapods.org/?q=name%3Anamodalsheet%2A)
+[![Cocoapods](https://cocoapod-badges.herokuapp.com/p/NAModalSheet/badge.png)](http://beta.cocoapods.org/?q=name%3Anamodalsheet%2A)
+
 ## Install with CocoaPods
 
-Use [CocoaPods](http://cocoapods.org) add NAModalSheet to your project.
+Use [CocoaPods](http://cocoapods.org) and add NAModalSheet to your project.
 
-* Add a pod entry for NAModalSheet to your Podfile 
+* Add a pod entry for NAModalSheet to your Podfile:
 
 ```
-pod 'NAModalSheet', :git => 'https://github.com/thedarkbark/NAModalSheet'
+pod 'NAModalSheet', '~> 0.0.1'
 ```	
 
 * Install the pod(s) by running:
