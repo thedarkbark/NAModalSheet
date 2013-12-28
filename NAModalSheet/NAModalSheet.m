@@ -15,7 +15,7 @@
 
 static NSMutableArray *modalSheets = nil;
 
-@interface NAModalSheet ()
+@interface NAModalSheet () <UIGestureRecognizerDelegate>
 {
   UIViewController *childContentVC;
 
@@ -71,6 +71,7 @@ static NSMutableArray *modalSheets = nil;
 
   UITapGestureRecognizer *mainViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTouched:)];
   [mainView addGestureRecognizer:mainViewTap];
+  mainViewTap.delegate = self;
 
   // If the view is sliding on from somewhere other than the edge of the screen, then the darkening tint should exclude
   // that portion.
@@ -101,9 +102,6 @@ static NSMutableArray *modalSheets = nil;
   childContainerContainer.clipsToBounds = YES;
   childContainerContainer.layer.cornerRadius = cornerRadius;
   [mainView addSubview:childContainerContainer];
-  
-  UITapGestureRecognizer *childContainerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTouched:)];
-  [childContainerContainer addGestureRecognizer:childContainerTap];
   
   // Add the child controller as a sub view controller of this one
   [self addChildViewController:childContentVC];
@@ -177,18 +175,13 @@ static NSMutableArray *modalSheets = nil;
   self.view = mainView;
 }
 
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+  return !(CGRectContainsPoint(childContentVC.view.bounds, [touch locationInView:childContentVC.view]));
+}
+
 -(IBAction)backgroundTouched:(id)sender
 {
-  if ([sender isKindOfClass:[UIGestureRecognizer class]])
-  {
-    UIGestureRecognizer* gestureRecognizer = (UIGestureRecognizer*)sender;
-    
-    CGPoint point = [gestureRecognizer locationInView:childContentVC.view];
-    
-    if (CGRectContainsPoint(childContentVC.view.bounds, point))
-      return;
-  }
-    
   // Let the delegate know the user touched outside the child content area.
   if ([self.delegate respondsToSelector:@selector(modalSheetTouchedOutsideContent:)])
   {
