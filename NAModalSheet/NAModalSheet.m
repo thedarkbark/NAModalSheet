@@ -234,6 +234,7 @@ static NSMutableArray *modalSheets = nil;
   else
   {
     childContainer.frame = containerFrame;
+    childContentVC.view.frame = childContainer.bounds;
     blurredBackground.frame = blurredBackgroundFrame;
   }
 }
