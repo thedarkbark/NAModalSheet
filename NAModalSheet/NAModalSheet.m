@@ -170,7 +170,7 @@ static NSMutableArray *modalSheets = nil;
   childView.frame = childViewRect;
   childView.layer.cornerRadius = cornerRadius;
   [childContainer addSubview:childView]; // should already be sized to fit
-  childView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+  childView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   
   self.view = mainView;
 }
@@ -186,6 +186,55 @@ static NSMutableArray *modalSheets = nil;
   if ([self.delegate respondsToSelector:@selector(modalSheetTouchedOutsideContent:)])
   {
     [self.delegate modalSheetTouchedOutsideContent:self];
+  }
+}
+
+-(void)adjustContentSize:(CGSize)newSize animated:(BOOL)animated
+{
+  CGRect containerFrame = childContainer.frame;
+  CGRect blurredBackgroundFrame = blurredBackground.frame;
+  
+  CGFloat vDelta = newSize.height - containerFrame.size.height;
+  CGFloat hDelta = newSize.width - containerFrame.size.width;
+  CGFloat vHalfDelta = roundf(vDelta * 0.5);
+  CGFloat hHalfDelta = roundf(hDelta * 0.5);
+  
+  if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered)
+  {
+    containerFrame.origin.y -= vHalfDelta;
+    blurredBackgroundFrame.origin.y += vHalfDelta;
+    childHiddenFrame.origin.y -= vHalfDelta;
+    blurHiddenFrame.origin.y += vHalfDelta;
+  }
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+  {
+    containerFrame.origin.y -= vDelta;
+    blurredBackgroundFrame.origin.y += vDelta;
+  }
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+  {
+    childHiddenFrame.origin.y -= vDelta;
+    blurHiddenFrame.origin.y += vDelta;
+  }
+
+  childHiddenFrame.origin.x -= hHalfDelta;
+  blurHiddenFrame.origin.x += hHalfDelta;
+  containerFrame.origin.x -= hHalfDelta;
+  blurredBackgroundFrame.origin.x += hHalfDelta;
+  
+  containerFrame.size = newSize;
+  childHiddenFrame.size = newSize;
+  if (animated)
+  {
+    [UIView animateWithDuration:0.5 animations:^{
+      childContainer.frame = containerFrame;
+      blurredBackground.frame = blurredBackgroundFrame;
+    }];
+  }
+  else
+  {
+    childContainer.frame = containerFrame;
+    blurredBackground.frame = blurredBackgroundFrame;
   }
 }
 

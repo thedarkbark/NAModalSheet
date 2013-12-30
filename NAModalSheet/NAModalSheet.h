@@ -34,4 +34,6 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
 -(void)presentWithCompletion:(void (^)(void))completion;
 -(void)dismissWithCompletion:(void (^)(void))completion;
 
+-(void)adjustContentSize:(CGSize)newSize animated:(BOOL)animated;
+
 @end

@@ -48,6 +48,26 @@
   }];
 }
 
+- (IBAction)largerSizeSwitchChanged:(id)sender
+{
+  UISwitch *sizeSwitch = (UISwitch*)sender;
+  if ([sizeSwitch isKindOfClass:[UISwitch class]])
+  {
+    CGSize s = self.view.bounds.size;
+    if (sizeSwitch.on)
+    {
+      s.height += 40;
+      s.width += 40;
+    }
+    else
+    {
+      s.height -= 40;
+      s.width -= 40;
+    }
+    [modalSheet adjustContentSize:s animated:YES];
+  }
+}
+
 #pragma mark NAModalSheetDelegate
 
 - (void)modalSheetTouchedOutsideContent:(NAModalSheet *)sheet
