@@ -339,6 +339,7 @@ static NSMutableArray *modalSheets = nil;
                    }
                    completion:^(BOOL finished) {
                      myWindow.hidden = YES;
+                     myWindow = nil;
                      
                      // remove child view controller
                      [childContentVC.view removeFromSuperview];
