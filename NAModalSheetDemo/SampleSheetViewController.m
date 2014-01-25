@@ -7,30 +7,9 @@
 //
 
 #import "SampleSheetViewController.h"
-
-@interface SampleSheetViewController () <NAModalSheetDelegate>
-{
-  __weak IBOutlet UISwitch* dismissOptionSwitch;
-  __weak NAModalSheet* modalSheet;
-}
-
-@end
+#import "NAModalSheet.h"
 
 @implementation SampleSheetViewController
-
-+ (void)presentWithStyle:(NAModalSheetPresentationStyle)style slideInset:(CGFloat)slideInset
-{
-  SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
-  NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:style];
-  svc->modalSheet = sheet;
-  sheet.cornerRadiusWhenCentered = 24.0;
-  sheet.slideInset = slideInset;
-  sheet.delegate = svc;
-  
-  [sheet presentWithCompletion:^{
-    
-  }];
-}
 
 - (instancetype)init
 {
@@ -43,7 +22,7 @@
 
 - (IBAction)dismissButtonTouched:(id)sender
 {
-  [modalSheet dismissWithCompletion:^{
+  [self.modalSheet dismissWithCompletion:^{
     
   }];
 }
@@ -64,19 +43,7 @@
       s.height -= 40;
       s.width -= 40;
     }
-    [modalSheet adjustContentSize:s animated:YES];
-  }
-}
-
-#pragma mark NAModalSheetDelegate
-
-- (void)modalSheetTouchedOutsideContent:(NAModalSheet *)sheet
-{
-  if (dismissOptionSwitch.on)
-  {
-    [modalSheet dismissWithCompletion:^{
-      
-    }];
+    [self.modalSheet adjustContentSize:s animated:YES];
   }
 }
 

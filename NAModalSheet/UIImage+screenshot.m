@@ -12,10 +12,27 @@
 
 + (UIImage*)screenshot
 {
+  return [self screenshotExcludingWindow:nil];
+}
+
++ (UIImage*)screenshotExcludingWindow:(UIWindow*)excludeWindow
+{
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  
   // Create a graphics context with the target size
   // On iOS 4 and later, use UIGraphicsBeginImageContextWithOptions to take the scale into consideration
   // On iOS prior to 4, fall back to use UIGraphicsBeginImageContext
   CGSize imageSize = [[UIScreen mainScreen] bounds].size;
+  
+  // If the orientation is landscape, swap the height/width since the window
+  // always has portrait dimensions.
+  if (UIInterfaceOrientationIsLandscape(orientation))
+  {
+    CGFloat h = imageSize.height;
+    imageSize.height = imageSize.width;
+    imageSize.width = h;
+  }
+
   if (NULL != UIGraphicsBeginImageContextWithOptions)
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
   else
@@ -26,15 +43,22 @@
   // Iterate over every window from back to front
   for (UIWindow *window in [[UIApplication sharedApplication] windows])
   {
-    if (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen])
+    if (window != excludeWindow && (![window respondsToSelector:@selector(screen)] || [window screen] == [UIScreen mainScreen]))
     {
       // -renderInContext: renders in the coordinate space of the layer,
       // so we must first apply the layer's geometry to the graphics context
       CGContextSaveGState(context);
       // Center the context around the window's anchor point
-      CGContextTranslateCTM(context, [window center].x, [window center].y);
+//      CGContextTranslateCTM(context, [window center].x, [window center].y);
+      CGPoint windowCenter = CGPointMake(imageSize.width*0.5, imageSize.height*0.5);
+      CGContextTranslateCTM(context, windowCenter.x, windowCenter.y);
       // Apply the window's transform about the anchor point
       CGContextConcatCTM(context, [window transform]);
+      // Adjust for device orientation
+      if (UIInterfaceOrientationIsLandscape(orientation))
+      {
+        CGContextConcatCTM(context, CGAffineTransformMakeRotation(M_PI_2 * (orientation == UIInterfaceOrientationLandscapeLeft ? 1.0 : -1.0)));
+      }
       // Offset by the portion of the bounds left of and above the anchor point
       CGContextTranslateCTM(context,
                             -[window bounds].size.width * [[window layer] anchorPoint].x,

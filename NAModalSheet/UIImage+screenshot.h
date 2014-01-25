@@ -9,5 +9,6 @@
 
 /* grab a screenshot */
 + (UIImage*)screenshot;
++ (UIImage*)screenshotExcludingWindow:(UIWindow*)excludeWindow;
 
 @end

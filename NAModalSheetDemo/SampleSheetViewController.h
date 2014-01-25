@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "NAModalSheet.h"
+
+@class NAModalSheet;
 
 @interface SampleSheetViewController : UIViewController
 
-+ (void)presentWithStyle:(NAModalSheetPresentationStyle)style slideInset:(CGFloat)slideInset;
+@property (nonatomic, weak) NAModalSheet *modalSheet;
 
 @end
