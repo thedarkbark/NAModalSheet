@@ -13,5 +13,6 @@
 @interface SampleSheetViewController : UIViewController
 
 @property (nonatomic, weak) NAModalSheet *modalSheet;
+@property (nonatomic, assign) BOOL opaque;
 
 @end

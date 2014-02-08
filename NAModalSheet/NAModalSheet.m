@@ -87,10 +87,13 @@ static NSMutableArray *modalSheets = nil;
   // Adjust all frames for the new orientation
   [self adjustFramesForBounds:self.view.bounds contentSize:childView.frame.size animated:NO];
 
-  // Replace the snapshot of the screen with one in the correct orientation.
-  UIImage *snapshot = [UIImage screenshotExcludingWindow:myWindow];
-  NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
-  blurredImageView.image = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];;
+  if (!self.disableBlurredBackground)
+  {
+    // Replace the snapshot of the screen with one in the correct orientation.
+    UIImage *snapshot = [UIImage screenshotExcludingWindow:myWindow];
+    NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
+    blurredImageView.image = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];;
+  }
 }
 
 - (void)adjustFramesForBounds:(CGRect)windowBounds contentSize:(CGSize)contentSize animated:(BOOL)animated
@@ -263,17 +266,20 @@ static NSMutableArray *modalSheets = nil;
   childContainer.backgroundColor = [UIColor clearColor];
   [childContainerContainer addSubview:childContainer];
   
-  // The blurred background container holds the blurred image of the screen snapshot. It's sized to fit the child view
-  // and also sized to clip out a portion of the snapshot if the child view is sliding in from somewhere other than
-  // the edge of the screen.
-  blurredBackground = [[UIView alloc] initWithFrame:mainView.bounds];
-  blurredBackground.clipsToBounds = YES;
-  blurredBackground.layer.cornerRadius = cornerRadius;
-  [childContainer addSubview:blurredBackground];
-  
-  blurredImageView = [[UIImageView alloc] initWithFrame:blurredBackground.bounds];
-  blurredImageView.layer.cornerRadius = cornerRadius;
-  [blurredBackground addSubview:blurredImageView];
+  if (!self.disableBlurredBackground)
+  {
+    // The blurred background container holds the blurred image of the screen snapshot. It's sized to fit the child view
+    // and also sized to clip out a portion of the snapshot if the child view is sliding in from somewhere other than
+    // the edge of the screen.
+    blurredBackground = [[UIView alloc] initWithFrame:mainView.bounds];
+    blurredBackground.clipsToBounds = YES;
+    blurredBackground.layer.cornerRadius = cornerRadius;
+    [childContainer addSubview:blurredBackground];
+    
+    blurredImageView = [[UIImageView alloc] initWithFrame:blurredBackground.bounds];
+    blurredImageView.layer.cornerRadius = cornerRadius;
+    [blurredBackground addSubview:blurredImageView];
+  }
 
   // The child view itself gets added last so it sits on top.
   childView.frame = childContainer.bounds;
@@ -329,11 +335,14 @@ static NSMutableArray *modalSheets = nil;
   [myWindow setRootViewController:self];
   
   // Take an immediate snapshot of the existing screen
-  UIImage *snapshot = [UIImage screenshot];
-  NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
-  UIImage *blurredSnapshot = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];
-  
-  blurredImageView.image = blurredSnapshot;
+  if (!self.disableBlurredBackground)
+  {
+    UIImage *snapshot = [UIImage screenshot];
+    NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
+    UIImage *blurredSnapshot = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];
+    
+    blurredImageView.image = blurredSnapshot;
+  }
   
   // Position the child controller's view below the screen bottom (or above the top) if it's going to slide in.
   // This is its before-animation state.

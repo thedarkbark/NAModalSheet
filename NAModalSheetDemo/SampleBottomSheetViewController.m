@@ -27,6 +27,15 @@
   return self;
 }
 
+- (void)viewDidLoad
+{
+  [super viewDidLoad];
+  if (self.opaque)
+  {
+    self.view.backgroundColor = [UIColor colorWithWhite:0.2 alpha:0.9];
+  }
+}
+
 - (void)viewDidLayoutSubviews
 {
   CGRect f = sizeLabel.frame;

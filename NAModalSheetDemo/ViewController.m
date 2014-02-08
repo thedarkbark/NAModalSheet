@@ -18,6 +18,8 @@
   __weak IBOutlet UILabel* landscapeSwitchLabel;
   __weak IBOutlet UISwitch* dismissOnOutsideTouchSwitch;
   __weak IBOutlet UILabel* dismissOutsideLabel;
+  __weak IBOutlet UISwitch* disableBlurSwitch;
+  __weak IBOutlet UILabel* disableBlurLabel;
 }
 @end
 
@@ -37,6 +39,10 @@
   f = dismissOutsideLabel.frame;
   f.origin.x = CGRectGetMaxX(dismissOnOutsideTouchSwitch.frame) + 8.0;
   dismissOutsideLabel.frame = f;
+  
+  f = disableBlurLabel.frame;
+  f.origin.x = CGRectGetMaxX(disableBlurSwitch.frame) + 8.0;
+  disableBlurLabel.frame = f;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -48,7 +54,9 @@
 - (IBAction)presentFromTop:(id)sender
 {
   SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
+  svc.opaque = disableBlurSwitch.on;
   NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleSlideInFromTop];
+  sheet.disableBlurredBackground = disableBlurSwitch.on;
   sheet.delegate = self;
   svc.modalSheet = sheet;
   [sheet presentWithCompletion:^{
@@ -63,7 +71,9 @@
   CGSize nbSize = myNavBar.frame.size;
   
   SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
+  svc.opaque = disableBlurSwitch.on;
   NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleSlideInFromTop];
+  sheet.disableBlurredBackground = disableBlurSwitch.on;
   sheet.slideInset = statusBarHeight + nbSize.height;
   sheet.delegate = self;
   svc.modalSheet = sheet;
@@ -75,7 +85,9 @@
 - (IBAction)presentFromBottom:(id)sender
 {
   SampleBottomSheetViewController *svc = [[SampleBottomSheetViewController alloc] init];
+  svc.opaque = disableBlurSwitch.on;
   NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleSlideInFromBottom];
+  sheet.disableBlurredBackground = disableBlurSwitch.on;
   sheet.delegate = self;
   svc.modalSheet = sheet;
   [sheet presentWithCompletion:^{
@@ -86,7 +98,9 @@
 - (IBAction)presentCentered:(id)sender
 {
   SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
+  svc.opaque = disableBlurSwitch.on;
   NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleFadeInCentered];
+  sheet.disableBlurredBackground = disableBlurSwitch.on;
   sheet.cornerRadiusWhenCentered = 24.0;
   sheet.delegate = self;
   svc.modalSheet = sheet;

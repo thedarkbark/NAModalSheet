@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
 @property (nonatomic, assign) CGFloat animationDuration;
 @property (nonatomic, assign) CGFloat slideInset;
 @property (nonatomic, assign) CGFloat cornerRadiusWhenCentered;
+@property (nonatomic, assign) BOOL disableBlurredBackground;
 
 - (instancetype)initWithViewController:(UIViewController *)vc
                      presentationStyle:(NAModalSheetPresentationStyle)style;
