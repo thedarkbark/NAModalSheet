@@ -9,6 +9,13 @@
 #import "SampleBottomSheetViewController.h"
 #import "NAModalSheet.h"
 
+@interface SampleBottomSheetViewController ()
+{
+  __weak IBOutlet UISwitch *sizeSwitch;
+  __weak IBOutlet UILabel *sizeLabel;
+}
+@end
+
 @implementation SampleBottomSheetViewController
 
 - (instancetype)init
@@ -20,6 +27,13 @@
   return self;
 }
 
+- (void)viewDidLayoutSubviews
+{
+  CGRect f = sizeLabel.frame;
+  f.origin.x = CGRectGetMaxX(sizeSwitch.frame) + 8.0;
+  sizeLabel.frame = f;
+}
+
 - (IBAction)dismissButtonTouched:(id)sender
 {
   [self.modalSheet dismissWithCompletion:^{
@@ -29,11 +43,11 @@
 
 - (IBAction)sizeSwitchChanged:(id)sender
 {
-  UISwitch *sizeSwitch = (UISwitch*)sender;
-  if ([sizeSwitch isKindOfClass:[UISwitch class]])
+  UISwitch *size_switch = (UISwitch*)sender;
+  if ([size_switch isKindOfClass:[UISwitch class]])
   {
     CGSize s = self.view.bounds.size;
-    if (sizeSwitch.on)
+    if (size_switch.on)
     {
       s.height += 40;
       s.width -= 40;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="vXZ-lx-hvc">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
@@ -40,11 +41,12 @@
                             <navigationBar contentMode="scaleToFill" id="LEe-12-0HV">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                                 <items>
-                                    <navigationItem title="Title" id="wYf-Rk-LNN"/>
+                                    <navigationItem title="NAModalSheet" id="wYf-Rk-LNN"/>
                                 </items>
                             </navigationBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="S35-Mg-wcn">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="S35-Mg-wcn">
                                 <rect key="frame" x="20" y="182" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -56,7 +58,7 @@
                                     <action selector="presentFromTop:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="R0z-RX-hMF"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="NHs-sR-0sk">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NHs-sR-0sk">
                                 <rect key="frame" x="20" y="249" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -68,7 +70,7 @@
                                     <action selector="presentFromTopExcludingNavBar:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="QO1-7X-cGS"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="KmV-he-gYt">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KmV-he-gYt">
                                 <rect key="frame" x="20" y="310" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -80,7 +82,7 @@
                                     <action selector="presentFromBottom:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="xXn-as-JP8"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="232-iB-wyr">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="232-iB-wyr">
                                 <rect key="frame" x="20" y="372" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -119,6 +121,7 @@
                     </view>
                     <connections>
                         <outlet property="dismissOnOutsideTouchSwitch" destination="cs4-QV-NM2" id="8CS-O9-kxz"/>
+                        <outlet property="dismissOutsideLabel" destination="bFw-iI-eb5" id="P2G-ca-9h4"/>
                         <outlet property="landscapeSwitch" destination="Ksz-vi-G9C" id="evv-bh-STj"/>
                         <outlet property="landscapeSwitchLabel" destination="zOJ-Pa-8X6" id="Vwz-mK-fNP"/>
                         <outlet property="myNavBar" destination="LEe-12-0HV" id="RXo-e4-6Bs"/>

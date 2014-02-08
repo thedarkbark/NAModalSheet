@@ -85,25 +85,12 @@ static NSMutableArray *modalSheets = nil;
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
   // Adjust all frames for the new orientation
-  [self adjustFramesForBounds:[self mainBounds] contentSize:childView.frame.size animated:NO];
+  [self adjustFramesForBounds:self.view.bounds contentSize:childView.frame.size animated:NO];
 
   // Replace the snapshot of the screen with one in the correct orientation.
   UIImage *snapshot = [UIImage screenshotExcludingWindow:myWindow];
   NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
   blurredImageView.image = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];;
-}
-
-- (CGRect)mainBounds
-{
-  CGRect mainBounds = myWindow.bounds;
-  if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
-  {
-    CGFloat h = mainBounds.size.height;
-    mainBounds.size.height = mainBounds.size.width;
-    mainBounds.size.width = h;
-  }
-  
-  return mainBounds;
 }
 
 - (void)adjustFramesForBounds:(CGRect)windowBounds contentSize:(CGSize)contentSize animated:(BOOL)animated
@@ -160,7 +147,6 @@ static NSMutableArray *modalSheets = nil;
     NSAssert(0, @"Unknown presentation style");
   }
   
-  self.view.bounds = mainBounds;
   backgroundTint.frame = tintRect;
   childContainerContainer.frame = tintRect;
   childContainer.frame = childContainerRect;
@@ -215,8 +201,6 @@ static NSMutableArray *modalSheets = nil;
 
 - (void)loadView
 {
-  CGFloat cornerRadius = self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered ? self.cornerRadiusWhenCentered : 0.0;
-  
   myWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   myWindow.autoresizingMask = UIViewAutoresizingNone;
   myWindow.opaque = NO;
@@ -228,6 +212,14 @@ static NSMutableArray *modalSheets = nil;
   [mainView addGestureRecognizer:mainViewTap];
   mainViewTap.delegate = self;
 
+  self.view = mainView;
+}
+
+- (void)viewDidLoad
+{
+  CGFloat cornerRadius = self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered ? self.cornerRadiusWhenCentered : 0.0;
+  UIView *mainView = self.view;
+  
   backgroundTint = [[UIView alloc] initWithFrame:mainView.bounds];
   backgroundTint.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
   backgroundTint.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
@@ -289,9 +281,22 @@ static NSMutableArray *modalSheets = nil;
   [childContainer addSubview:childView]; // should already be sized to fit
   childView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   
-  self.view = mainView;
+  CGRect mainBounds = [self mainBoundsForOrientation:self.interfaceOrientation];
+  self.view.frame = mainBounds;
+  [self adjustFramesForBounds:mainBounds contentSize:childView.frame.size];
+}
+
+- (CGRect)mainBoundsForOrientation:(UIInterfaceOrientation)orientation
+{
+  CGRect mainBounds = myWindow.bounds;
+  if (UIInterfaceOrientationIsLandscape(orientation))
+  {
+    CGFloat h = mainBounds.size.height;
+    mainBounds.size.height = mainBounds.size.width;
+    mainBounds.size.width = h;
+  }
   
-  [self adjustFramesForBounds:[self mainBounds] contentSize:childView.frame.size];
+  return mainBounds;
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

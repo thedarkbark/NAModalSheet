@@ -9,6 +9,13 @@
 #import "SampleSheetViewController.h"
 #import "NAModalSheet.h"
 
+@interface SampleSheetViewController ()
+{
+  __weak IBOutlet UISwitch *sizeSwitch;
+  __weak IBOutlet UILabel *sizeLabel;
+}
+@end
+
 @implementation SampleSheetViewController
 
 - (instancetype)init
@@ -18,6 +25,13 @@
   {
   }
   return self;
+}
+
+- (void)viewDidLayoutSubviews
+{
+  CGRect f = sizeLabel.frame;
+  f.origin.x = CGRectGetMaxX(sizeSwitch.frame) + 8.0;
+  sizeLabel.frame = f;
 }
 
 - (IBAction)dismissButtonTouched:(id)sender

@@ -72,6 +72,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BEB48CCE18A3A9E600238836 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iPad;
+			sourceTree = "<group>";
+		};
 		BED007DE1841396200634561 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +112,7 @@
 		BED007F01841396200634561 /* NAModalSheetDemo */ = {
 			isa = PBXGroup;
 			children = (
+				BEB48CCE18A3A9E600238836 /* iPad */,
 				BED007F91841396200634561 /* AppDelegate.h */,
 				BED007FA1841396200634561 /* AppDelegate.m */,
 				BED007FC1841396200634561 /* Main.storyboard */,
@@ -326,7 +334,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NAModalSheetDemo/NAModalSheetDemo-Prefix.pch";
 				INFOPLIST_FILE = "NAModalSheetDemo/NAModalSheetDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -339,7 +349,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NAModalSheetDemo/NAModalSheetDemo-Prefix.pch";
 				INFOPLIST_FILE = "NAModalSheetDemo/NAModalSheetDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

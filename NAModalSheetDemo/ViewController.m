@@ -17,6 +17,7 @@
   __weak IBOutlet UISwitch* landscapeSwitch;
   __weak IBOutlet UILabel* landscapeSwitchLabel;
   __weak IBOutlet UISwitch* dismissOnOutsideTouchSwitch;
+  __weak IBOutlet UILabel* dismissOutsideLabel;
 }
 @end
 
@@ -25,6 +26,17 @@
 - (void)viewDidLoad
 {
   landscapeSwitch.on = YES;
+}
+
+- (void)viewDidLayoutSubviews
+{
+  CGRect f = landscapeSwitchLabel.frame;
+  f.origin.x = CGRectGetMaxX(landscapeSwitch.frame) + 8.0;
+  landscapeSwitchLabel.frame = f;
+  
+  f = dismissOutsideLabel.frame;
+  f.origin.x = CGRectGetMaxX(dismissOnOutsideTouchSwitch.frame) + 8.0;
+  dismissOutsideLabel.frame = f;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
