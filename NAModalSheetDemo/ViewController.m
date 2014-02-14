@@ -15,7 +15,6 @@
 {
   __weak IBOutlet UINavigationBar* myNavBar;
   __weak IBOutlet UISwitch* landscapeSwitch;
-  __weak IBOutlet UILabel* landscapeSwitchLabel;
   __weak IBOutlet UISwitch* dismissOnOutsideTouchSwitch;
   __weak IBOutlet UILabel* dismissOutsideLabel;
   __weak IBOutlet UISwitch* disableBlurSwitch;
@@ -25,30 +24,15 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad
-{
-  landscapeSwitch.on = YES;
-}
-
 - (void)viewDidLayoutSubviews
 {
-  CGRect f = landscapeSwitchLabel.frame;
-  f.origin.x = CGRectGetMaxX(landscapeSwitch.frame) + 8.0;
-  landscapeSwitchLabel.frame = f;
-  
-  f = dismissOutsideLabel.frame;
+  CGRect f = dismissOutsideLabel.frame;
   f.origin.x = CGRectGetMaxX(dismissOnOutsideTouchSwitch.frame) + 8.0;
   dismissOutsideLabel.frame = f;
   
   f = disableBlurLabel.frame;
   f.origin.x = CGRectGetMaxX(disableBlurSwitch.frame) + 8.0;
   disableBlurLabel.frame = f;
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-  landscapeSwitch.hidden = (UIInterfaceOrientationIsLandscape(toInterfaceOrientation));
-  landscapeSwitchLabel.hidden = landscapeSwitch.hidden;
 }
 
 - (IBAction)presentFromTop:(id)sender
@@ -66,15 +50,10 @@
 
 - (IBAction)presentFromTopExcludingNavBar:(id)sender
 {
-  CGSize sbSize = [[UIApplication sharedApplication] statusBarFrame].size;
-  CGFloat statusBarHeight = UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? sbSize.width : sbSize.height;
-  CGSize nbSize = myNavBar.frame.size;
-  
   SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
   svc.opaque = disableBlurSwitch.on;
-  NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleSlideInFromTop];
+  NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleSlideInFromUnderNavBar];
   sheet.disableBlurredBackground = disableBlurSwitch.on;
-  sheet.slideInset = statusBarHeight + nbSize.height;
   sheet.delegate = self;
   svc.modalSheet = sheet;
   [sheet presentWithCompletion:^{
@@ -107,16 +86,6 @@
   [sheet presentWithCompletion:^{
     
   }];
-}
-
-- (BOOL)shouldAutorotate
-{
-  return landscapeSwitch.on;
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-  return (landscapeSwitch.on ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskPortrait);
 }
 
 #pragma mark NAModalSheetDelegate

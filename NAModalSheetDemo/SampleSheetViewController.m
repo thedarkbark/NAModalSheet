@@ -52,11 +52,11 @@
 
 - (IBAction)largerSizeSwitchChanged:(id)sender
 {
-  UISwitch *sizeSwitch = (UISwitch*)sender;
-  if ([sizeSwitch isKindOfClass:[UISwitch class]])
+  UISwitch *largerSizeSwitch = (UISwitch*)sender;
+  if ([largerSizeSwitch isKindOfClass:[UISwitch class]])
   {
     CGSize s = self.view.bounds.size;
-    if (sizeSwitch.on)
+    if (largerSizeSwitch.on)
     {
       s.height += 40;
       s.width += 40;

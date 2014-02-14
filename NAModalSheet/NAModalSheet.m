@@ -112,19 +112,34 @@ static NSMutableArray *modalSheets = nil;
 
 - (void)adjustFramesForBounds:(CGRect)mainBounds contentSize:(CGSize)contentSize
 {
+  CGFloat insetFromEdge = self.slideInset;
+  
+  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
+  {
+    CGRect sbFrame = [[UIApplication sharedApplication] statusBarFrame];
+    CGFloat statusBarHeight = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) ? sbFrame.size.height : sbFrame.size.width;
+    UIViewController *rootVC = prevWindow.rootViewController;
+    CGFloat navBarHeight = 0;
+    if ([rootVC isKindOfClass:[UINavigationController class]])
+    {
+      navBarHeight = ((UINavigationController*)rootVC).navigationBar.frame.size.height;
+    }
+    insetFromEdge = statusBarHeight + navBarHeight;
+  }
+  
   // If the view is sliding on from somewhere other than the edge of the screen, then the darkening tint should exclude
   // that portion.
   CGRect tintRect = mainBounds;
-  if (self.slideInset > 0.0)
+  if (insetFromEdge > 0.0)
   {
     if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
     {
-      tintRect.size.height -= self.slideInset;
+      tintRect.size.height -= insetFromEdge;
     }
-    else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+    else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
     {
-      tintRect.size.height -= self.slideInset;
-      tintRect.origin.y += self.slideInset;
+      tintRect.size.height -= insetFromEdge;
+      tintRect.origin.y += insetFromEdge;
     }
   }
   
@@ -141,7 +156,7 @@ static NSMutableArray *modalSheets = nil;
   {
     childContainerRect.origin.y = CGRectGetMaxY(tintRect) - contentSize.height;
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
     childContainerRect.origin.y = 0.0;
   }
@@ -164,11 +179,11 @@ static NSMutableArray *modalSheets = nil;
 
   if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
   {
-    blurBgndRect.size.height -= self.slideInset;
+    blurBgndRect.size.height -= insetFromEdge;
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
-    blurBgndRect.origin.y -= self.slideInset;
+    blurBgndRect.origin.y -= insetFromEdge;
   }
   
   blurredBackground.frame = blurBgndRect;
@@ -186,7 +201,7 @@ static NSMutableArray *modalSheets = nil;
   {
     childHiddenFrame.origin.y = CGRectGetMaxY(childContainerContainer.bounds);
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
     childHiddenFrame.origin.y = -CGRectGetHeight(childContainer.frame);
   }
@@ -196,7 +211,7 @@ static NSMutableArray *modalSheets = nil;
   {
     blurHiddenFrame.origin.y -= CGRectGetHeight(childContainer.frame);
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
     blurHiddenFrame.origin.y += CGRectGetMaxY(childContainer.bounds);
   }
@@ -251,7 +266,7 @@ static NSMutableArray *modalSheets = nil;
   {
     childContainer.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromTop || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
     childContainer.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
   }
