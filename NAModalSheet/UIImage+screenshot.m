@@ -49,11 +49,15 @@
       // so we must first apply the layer's geometry to the graphics context
       CGContextSaveGState(context);
       // Center the context around the window's anchor point
-//      CGContextTranslateCTM(context, [window center].x, [window center].y);
       CGPoint windowCenter = CGPointMake(imageSize.width*0.5, imageSize.height*0.5);
       CGContextTranslateCTM(context, windowCenter.x, windowCenter.y);
       // Apply the window's transform about the anchor point
       CGContextConcatCTM(context, [window transform]);
+      // If upside-down, apply an extra 180deg rotation
+      if (UIInterfaceOrientationPortraitUpsideDown == orientation)
+      {
+        CGContextConcatCTM(context, CGAffineTransformMakeRotation(M_PI));
+      }
       // Adjust for device orientation
       if (UIInterfaceOrientationIsLandscape(orientation))
       {
