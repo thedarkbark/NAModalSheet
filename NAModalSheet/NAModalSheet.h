@@ -26,6 +26,21 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
   NAModalSheetPresentationStyleFadeInCentered
 };
 
+typedef NS_ENUM(NSUInteger, NAModalSheetHorizontalJustification) {
+  
+  // Center the sheet horizontally on the screen - default
+  NAModalSheetHorizontalJustificationCentered,
+  
+  // Left justify the sheet horizontally on the screen
+  NAModalSheetHorizontalJustificationLeft,
+
+  // Right justify the sheet horizontally on the screen
+  NAModalSheetHorizontalJustificationRight,
+  
+  // Resize the view's width to fill the screen horizontally
+  NAModalSheetHorizontalJustificationFull
+};
+
 @class NAModalSheet;
 
 @protocol NAModalSheetDelegate <NSObject>
@@ -65,6 +80,9 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
 // Set this to YES to have the sheet automatically dismiss when touched outside the content view
 // (only if delegate doesn't respond to modalSheetTouchedOutsideContent:)
 @property (nonatomic, assign) BOOL autoDismissWhenTouchedOutsideContent;
+
+// Determines the horizontal justification of the content view horizontally within the screen - defaults to centered
+@property (nonatomic, assign) NAModalSheetHorizontalJustification horizontalJustification;
 
 // Initialize the modal sheet with your view controller and a presentation style
 - (instancetype)initWithViewController:(UIViewController *)vc

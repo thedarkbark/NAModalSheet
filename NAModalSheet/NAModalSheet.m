@@ -115,6 +115,12 @@ static NSMutableArray *modalSheets = nil;
 {
   CGFloat insetFromEdge = self.slideInset;
   
+  // If full justification was specified, change the contentSize so the width fills the screen
+  if (self.horizontalJustification == NAModalSheetHorizontalJustificationFull)
+  {
+    contentSize.width = CGRectGetWidth(mainBounds);
+  }
+  
   UIViewController *rootVC = prevWindow.rootViewController;
   if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
@@ -157,7 +163,23 @@ static NSMutableArray *modalSheets = nil;
   // of the screen snapshot animates within it to appear motionless in relation to the screen.
   CGRect childContainerRect = tintRect;
   childContainerRect.size = contentSize;
-  childContainerRect.origin.x = CGRectGetMidX(tintRect) - roundf(0.5 * contentSize.width);
+  switch (self.horizontalJustification)
+  {
+    default:
+    case NAModalSheetHorizontalJustificationCentered:
+      childContainerRect.origin.x = CGRectGetMidX(tintRect) - roundf(0.5 * contentSize.width);
+      break;
+      
+    case NAModalSheetHorizontalJustificationLeft:
+    case NAModalSheetHorizontalJustificationFull:
+      childContainerRect.origin.x = CGRectGetMinX(tintRect);
+      break;
+      
+    case NAModalSheetHorizontalJustificationRight:
+      childContainerRect.origin.x = CGRectGetMaxX(tintRect) - contentSize.width;
+      break;
+  }
+
   if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered)
   {
     childContainerRect.origin.y = CGRectGetMidY(tintRect) - roundf(0.5 * contentSize.height);
@@ -363,7 +385,12 @@ static NSMutableArray *modalSheets = nil;
   
   [modalSheets addObject:self];
   
+  [myWindow makeKeyAndVisible];
   [myWindow setRootViewController:self];
+  
+  // Ensure frames are correct for current bounds after setting root view - otherwise orientation
+  // changes mess this up.
+  [self adjustFramesForBounds:self.view.bounds contentSize:childView.bounds.size animated:NO];
   
   // Take an immediate snapshot of the existing screen
   if (!self.disableBlurredBackground)
@@ -400,9 +427,6 @@ static NSMutableArray *modalSheets = nil;
     self.view.alpha = 1.0;
     backgroundTint.alpha = 0.0;
   }
-  
-  // Make my window visible. Everything on it should be either clear or clipped out at this point.
-  [myWindow makeKeyAndVisible];
   
   // Present.
   [UIView animateWithDuration:self.animationDuration
