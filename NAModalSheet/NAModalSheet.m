@@ -67,6 +67,7 @@ static NSMutableArray *modalSheets = nil;
     _presentationStyle = style;
     childContentVC = vc;
     prevWindow = [[UIApplication sharedApplication] keyWindow];
+    self.backgroundTintColor = [UIColor colorWithWhite:0.0 alpha:0.4];
     
     if (modalSheets == nil)
     {
@@ -249,7 +250,7 @@ static NSMutableArray *modalSheets = nil;
   
   backgroundTint = [[UIView alloc] initWithFrame:mainView.bounds];
   backgroundTint.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-  backgroundTint.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
+  backgroundTint.backgroundColor = self.backgroundTintColor;
   backgroundTint.alpha = 0.0;
   [mainView addSubview:backgroundTint];
   
@@ -368,6 +369,9 @@ static NSMutableArray *modalSheets = nil;
     blurredImageView.image = blurredSnapshot;
   }
   
+  // Make sure this is applied in case it changed between load and presentation.
+  backgroundTint.backgroundColor = self.backgroundTintColor;
+
   // Position the child controller's view below the screen bottom (or above the top) if it's going to slide in.
   // This is its before-animation state.
   CGRect childContainerOrig = childContainer.frame;

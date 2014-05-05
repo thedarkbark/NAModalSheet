@@ -59,6 +59,9 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
 // Set YES to disable blurred background to improve performance if your modal view is opaque or you don't want the blur
 @property (nonatomic, assign) BOOL disableBlurredBackground;
 
+// This color is used to "tint" the background outside the modal content - by default, it is black at 40% alpha
+@property (nonatomic, strong) UIColor *backgroundTintColor;
+
 // Initialize the modal sheet with your view controller and a presentation style
 - (instancetype)initWithViewController:(UIViewController *)vc
                      presentationStyle:(NAModalSheetPresentationStyle)style;
