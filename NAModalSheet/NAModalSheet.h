@@ -62,6 +62,10 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
 // This color is used to "tint" the background outside the modal content - by default, it is black at 40% alpha
 @property (nonatomic, strong) UIColor *backgroundTintColor;
 
+// Set this to YES to have the sheet automatically dismiss when touched outside the content view
+// (only if delegate doesn't respond to modalSheetTouchedOutsideContent:)
+@property (nonatomic, assign) BOOL autoDismissWhenTouchedOutsideContent;
+
 // Initialize the modal sheet with your view controller and a presentation style
 - (instancetype)initWithViewController:(UIViewController *)vc
                      presentationStyle:(NAModalSheetPresentationStyle)style;

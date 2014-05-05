@@ -342,6 +342,12 @@ static NSMutableArray *modalSheets = nil;
   {
     [self.delegate modalSheetTouchedOutsideContent:self];
   }
+  else if (self.autoDismissWhenTouchedOutsideContent)
+  {
+    [self dismissWithCompletion:^{
+      
+    }];
+  }
 }
 
 -(void)adjustContentSize:(CGSize)newSize animated:(BOOL)animated
