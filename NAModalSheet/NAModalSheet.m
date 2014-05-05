@@ -114,11 +114,11 @@ static NSMutableArray *modalSheets = nil;
 {
   CGFloat insetFromEdge = self.slideInset;
   
+  UIViewController *rootVC = prevWindow.rootViewController;
   if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderNavBar)
   {
     CGRect sbFrame = [[UIApplication sharedApplication] statusBarFrame];
     CGFloat statusBarHeight = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) ? sbFrame.size.height : sbFrame.size.width;
-    UIViewController *rootVC = prevWindow.rootViewController;
     CGFloat navBarHeight = 0;
     if ([rootVC isKindOfClass:[UINavigationController class]])
     {
@@ -126,13 +126,22 @@ static NSMutableArray *modalSheets = nil;
     }
     insetFromEdge = statusBarHeight + navBarHeight;
   }
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
+  {
+    CGFloat toolbarHeight = 0;
+    if ([rootVC isKindOfClass:[UINavigationController class]])
+    {
+      toolbarHeight = ((UINavigationController*)rootVC).toolbar.frame.size.height;
+    }
+    insetFromEdge = toolbarHeight;
+  }
   
   // If the view is sliding on from somewhere other than the edge of the screen, then the darkening tint should exclude
   // that portion.
   CGRect tintRect = mainBounds;
   if (insetFromEdge > 0.0)
   {
-    if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+    if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
     {
       tintRect.size.height -= insetFromEdge;
     }
@@ -152,7 +161,7 @@ static NSMutableArray *modalSheets = nil;
   {
     childContainerRect.origin.y = CGRectGetMidY(tintRect) - roundf(0.5 * contentSize.height);
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
   {
     childContainerRect.origin.y = CGRectGetMaxY(tintRect) - contentSize.height;
   }
@@ -177,7 +186,7 @@ static NSMutableArray *modalSheets = nil;
   CGRect blurViewRect = blurBgndRect;
   blurViewRect.origin.x = blurViewRect.origin.y = 0.0;
 
-  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
   {
     blurBgndRect.size.height -= insetFromEdge;
   }
@@ -197,7 +206,7 @@ static NSMutableArray *modalSheets = nil;
 - (void)adjustHiddenRectsForBounds:(CGRect)mainBounds contentSize:(CGSize)contentSize
 {
   childHiddenFrame = childContainer.frame;
-  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
   {
     childHiddenFrame.origin.y = CGRectGetMaxY(childContainerContainer.bounds);
   }
@@ -207,7 +216,7 @@ static NSMutableArray *modalSheets = nil;
   }
   
   blurHiddenFrame = blurredBackground.frame;
-  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+  if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
   {
     blurHiddenFrame.origin.y -= CGRectGetHeight(childContainer.frame);
   }
@@ -262,7 +271,7 @@ static NSMutableArray *modalSheets = nil;
   {
     childContainer.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
   }
-  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom)
+  else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
   {
     childContainer.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
   }

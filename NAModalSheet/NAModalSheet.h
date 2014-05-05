@@ -19,6 +19,9 @@ typedef NS_ENUM(NSUInteger, NAModalSheetPresentationStyle) {
   // This style requires your window's root view controller to be a UINavigationController - slides in from top
   NAModalSheetPresentationStyleSlideInFromUnderNavBar,
   
+  // This style requires your window's root view controller to be a UINavigationController - slides in from bottom
+  NAModalSheetPresentationStyleSlideInFromUnderToolbar,
+  
   // Centered on the screen - fades in and out
   NAModalSheetPresentationStyleFadeInCentered
 };
