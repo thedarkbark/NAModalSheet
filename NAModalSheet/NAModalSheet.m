@@ -252,6 +252,8 @@ static NSMutableArray *modalSheets = nil;
 - (void)loadView
 {
   myWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+  // Ensure my window is "above" the previous on in the z-order - this can affect the text editing magnifying glass among other things
+  myWindow.windowLevel = prevWindow.windowLevel + 0.01;
   myWindow.autoresizingMask = UIViewAutoresizingNone;
   myWindow.opaque = NO;
 
