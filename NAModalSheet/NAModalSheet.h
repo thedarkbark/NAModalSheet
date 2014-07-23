@@ -48,6 +48,7 @@ typedef NS_ENUM(NSUInteger, NAModalSheetHorizontalJustification) {
 
 // This delegate method will be called if the user touches outside the content view provided. You may want to use this
 // to dismiss the sheet.
+// If you prefer blocks, you can set the touchedOutsideContent property instead.
 -(void)modalSheetTouchedOutsideContent:(NAModalSheet*)sheet;
 
 // These two delegate methods are analogous to the UIViewController shouldAutorotate and supportedInterfaceOrientations
@@ -80,6 +81,10 @@ typedef NS_ENUM(NSUInteger, NAModalSheetHorizontalJustification) {
 // Set this to YES to have the sheet automatically dismiss when touched outside the content view
 // (only if delegate doesn't respond to modalSheetTouchedOutsideContent:)
 @property (nonatomic, assign) BOOL autoDismissWhenTouchedOutsideContent;
+
+// This block will be called if the user touches outside the content view.
+// If you set this, the autoDismissWhenTouchedOutsideContent property is ignored.
+@property (nonatomic, copy) void (^touchedOutsideContent)(NAModalSheet *sheet);
 
 // Determines the horizontal justification of the content view horizontally within the screen - defaults to centered
 @property (nonatomic, assign) NAModalSheetHorizontalJustification horizontalJustification;
