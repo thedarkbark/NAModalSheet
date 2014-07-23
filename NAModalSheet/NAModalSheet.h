@@ -54,6 +54,12 @@ typedef NS_ENUM(NSUInteger, NAModalSheetHorizontalJustification) {
 // These two delegate methods are analogous to the UIViewController shouldAutorotate and supportedInterfaceOrientations
 // methods. If the presenting view controller is overriding those methods, it should also implement these two methods
 // and return the same values.
+// If you specify the presenting view controller when presenting the
+// modal sheet, you don't need to implement these as the values will be
+// taken directly from the presenting view controller. If these are not
+// implemented and the presenting view controller is not specified, then
+// the settings are taken from the child/modal view controller being
+// presented.
 -(BOOL)modalSheetShouldAutorotate:(NAModalSheet*)sheet;
 -(NSUInteger)modalSheetSupportedInterfaceOrientations:(NAModalSheet*)sheet;
 
@@ -93,8 +99,12 @@ typedef NS_ENUM(NSUInteger, NAModalSheetHorizontalJustification) {
 - (instancetype)initWithViewController:(UIViewController *)vc
                      presentationStyle:(NAModalSheetPresentationStyle)style;
 
-// Present and dismiss the modal sheet - completion blocks are optional
+// Present and dismiss the modal sheet - completion blocks are optional.
+// Specifying the presenting view controller allows the modal to use the
+// same orientation/rotation restrictions.
 -(void)presentWithCompletion:(void (^)(void))completion;
+-(void)presentFromViewController:(UIViewController*)presentingVC
+                  withCompletion:(void (^)(void))completion;
 -(void)dismissWithCompletion:(void (^)(void))completion;
 
 // Changes the size of the modal sheet view while presented.

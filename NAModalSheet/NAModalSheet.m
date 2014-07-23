@@ -18,7 +18,8 @@ static NSMutableArray *modalSheets = nil;
 @interface NAModalSheet () <UIGestureRecognizerDelegate>
 {
   UIViewController *childContentVC;
-
+  __weak UIViewController *presentingViewController;
+  
   UIWindow* prevWindow;
   UIWindow* myWindow;
   
@@ -50,7 +51,11 @@ static NSMutableArray *modalSheets = nil;
   {
     return [self.delegate modalSheetShouldAutorotate:self];
   }
-  return [super shouldAutorotate];
+  else if (presentingViewController)
+  {
+    return [presentingViewController shouldAutorotate];
+  }
+  return [childContentVC shouldAutorotate];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -59,7 +64,28 @@ static NSMutableArray *modalSheets = nil;
   {
     return [self.delegate modalSheetSupportedInterfaceOrientations:self];
   }
-  return [super supportedInterfaceOrientations];
+  else if (presentingViewController)
+  {
+    if ([presentingViewController respondsToSelector:@selector(supportedInterfaceOrientations)])
+    {
+      return [presentingViewController supportedInterfaceOrientations];
+    }
+  }
+  else if ([childContentVC respondsToSelector:@selector(supportedInterfaceOrientations)])
+  {
+    return [childContentVC supportedInterfaceOrientations];
+  }
+  
+  return 0;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+  if (presentingViewController)
+  {
+    return [presentingViewController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+  }
+  return [childContentVC shouldAutorotateToInterfaceOrientation:interfaceOrientation];
 }
 
 - (instancetype)initWithViewController:(UIViewController *)vc
@@ -393,8 +419,11 @@ static NSMutableArray *modalSheets = nil;
   [myWindow makeKeyAndVisible];
 }
 
--(void)presentWithCompletion:(void (^)(void))completion
+-(void)presentFromViewController:(UIViewController*)presentingVC
+                  withCompletion:(void (^)(void))completion
 {
+  presentingViewController = presentingVC;
+  
   // Force my view to load now.
   if (self.view == nil)
     return;
@@ -459,6 +488,11 @@ static NSMutableArray *modalSheets = nil;
                        completion();
                      }
                    }];
+}
+
+-(void)presentWithCompletion:(void (^)(void))completion
+{
+  [self presentFromViewController:nil withCompletion:completion];
 }
 
 - (void)dismissWithCompletion:(void (^)(void))completion
