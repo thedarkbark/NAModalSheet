@@ -39,6 +39,11 @@ static NSMutableArray *modalSheets = nil;
 
 @implementation NAModalSheet
 
+- (void)dealloc
+{
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (BOOL)shouldAutorotate
 {
   if ([self.delegate respondsToSelector:@selector(modalSheetShouldAutorotate:)])
@@ -379,6 +384,11 @@ static NSMutableArray *modalSheets = nil;
   [self adjustFramesForBounds:self.view.bounds contentSize:newSize animated:YES];
 }
 
+-(void)returningFromBackground:(NSNotification*)notification
+{
+  [myWindow makeKeyAndVisible];
+}
+
 -(void)presentWithCompletion:(void (^)(void))completion
 {
   // Force my view to load now.
@@ -389,6 +399,7 @@ static NSMutableArray *modalSheets = nil;
   
   [myWindow makeKeyAndVisible];
   [myWindow setRootViewController:self];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(returningFromBackground:) name:UIApplicationDidBecomeActiveNotification object:nil];
   
   // Ensure frames are correct for current bounds after setting root view - otherwise orientation
   // changes mess this up.
@@ -453,6 +464,8 @@ static NSMutableArray *modalSheets = nil;
   NSAssert(self == [modalSheets lastObject], @"Dismissing sheet not presented last");
   
   [modalSheets removeObject:self];
+  
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
   
   // Animate the view away
   [UIView animateWithDuration:self.animationDuration
