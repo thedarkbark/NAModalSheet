@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'NAModalSheet'
-  s.version = '0.0.6'
+  s.version = ‘0.0.9’
   s.license = 'MIT'
   s.summary = 'Presents your view controller with a blurred image of the background behind it.'
   s.homepage = 'https://github.com/thedarkbark/NAModalSheet'
@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.authors = { 'Ken Worley' => 'kwgithub@thedarkbark.com' }
   
   s.source_files = 'NAModalSheet/*.{h,m}'
-  s.source = { :git => 'https://github.com/thedarkbark/NAModalSheet.git', :tag => '0.0.6' }  
+  s.source = { :git => 'https://github.com/thedarkbark/NAModalSheet.git', :tag => ‘0.0.9’ }  
 end
