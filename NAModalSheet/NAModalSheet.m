@@ -22,6 +22,7 @@ static NSMutableArray *modalSheets = nil;
   
   UIWindow* prevWindow;
   UIWindow* myWindow;
+  UITapGestureRecognizer *tapOutsideRecognizer;
   
   UIView *backgroundTint;
   UIView *childContainerContainer;
@@ -291,9 +292,9 @@ static NSMutableArray *modalSheets = nil;
   UIView *mainView = [[UIView alloc] initWithFrame:myWindow.bounds];
   mainView.backgroundColor = [UIColor clearColor];
 
-  UITapGestureRecognizer *mainViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTouched:)];
-  [mainView addGestureRecognizer:mainViewTap];
-  mainViewTap.delegate = self;
+  tapOutsideRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTouched:)];
+  [mainView addGestureRecognizer:tapOutsideRecognizer];
+  tapOutsideRecognizer.delegate = self;
 
   self.view = mainView;
 }
@@ -485,6 +486,8 @@ static NSMutableArray *modalSheets = nil;
                    completion:^(BOOL finished) {
                      if (completion)
                      {
+                       tapOutsideRecognizer.enabled = YES;
+                       childContainer.userInteractionEnabled = YES;
                        completion();
                      }
                    }];
@@ -501,6 +504,8 @@ static NSMutableArray *modalSheets = nil;
   NSAssert(sheetIndex != NSNotFound, @"Dismissing sheet not found in modalSheets");
   NSAssert(self == [modalSheets lastObject], @"Dismissing sheet not presented last");
   
+  tapOutsideRecognizer.enabled = NO;
+  childContainer.userInteractionEnabled = NO;
   [modalSheets removeObject:self];
   
   [[NSNotificationCenter defaultCenter] removeObserver:self];
