@@ -123,9 +123,7 @@ static NSMutableArray *modalSheets = nil;
   if (!self.disableBlurredBackground)
   {
     // Replace the snapshot of the screen with one in the correct orientation.
-    UIImage *snapshot = [UIImage screenshotExcludingWindow:myWindow];
-    NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
-    blurredImageView.image = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];;
+    blurredImageView.image = [self processedBackgroundImage];
   }
 }
 
@@ -442,11 +440,7 @@ static NSMutableArray *modalSheets = nil;
   // Take an immediate snapshot of the existing screen
   if (!self.disableBlurredBackground)
   {
-    UIImage *snapshot = [UIImage screenshot];
-    NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
-    UIImage *blurredSnapshot = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];
-    
-    blurredImageView.image = blurredSnapshot;
+    blurredImageView.image = [self processedBackgroundImage];
   }
   
   // Make sure this is applied in case it changed between load and presentation.
@@ -537,6 +531,24 @@ static NSMutableArray *modalSheets = nil;
                        completion();
                      }
                    }];
+}
+
+- (UIImage *)processedBackgroundImage
+{
+  UIImage *snapshot = [UIImage screenshotExcludingWindow:myWindow];
+ 
+  UIImage *result = nil;
+  if (self.backgroundProcessingBlock != nil)
+  {
+    result = self.backgroundProcessingBlock(snapshot);
+  }
+  else
+  {
+    NSData *imageData = UIImageJPEGRepresentation(snapshot, 0.01);
+    result = [[UIImage imageWithData:imageData] blurredImage:kBlurParameter];
+  }
+
+  return result;
 }
 
 @end

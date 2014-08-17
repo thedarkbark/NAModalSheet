@@ -81,6 +81,9 @@ typedef NS_ENUM(NSUInteger, NAModalSheetHorizontalJustification) {
 // Set YES to disable blurred background to improve performance if your modal view is opaque or you don't want the blur
 @property (nonatomic, assign) BOOL disableBlurredBackground;
 
+// Custom background image processing block. If nil, it uses default blurring algorithm
+@property (nonatomic, copy) UIImage *(^backgroundProcessingBlock)(UIImage *image);
+
 // This color is used to "tint" the background outside the modal content - by default, it is black at 40% alpha
 @property (nonatomic, strong) UIColor *backgroundTintColor;
 

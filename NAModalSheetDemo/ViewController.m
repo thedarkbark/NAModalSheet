@@ -10,6 +10,7 @@
 #import "SampleSheetViewController.h"
 #import "SampleBottomSheetViewController.h"
 #import "NAModalSheet.h"
+#import "UIImage+BoxBlur.h"
 
 @interface ViewController () <NAModalSheetDelegate>
 {
@@ -85,6 +86,23 @@
   svc.modalSheet = sheet;
   [sheet presentWithCompletion:^{
     
+  }];
+}
+
+- (IBAction)presentCustomFromTop:(id)sender
+{
+  SampleSheetViewController *svc = [[SampleSheetViewController alloc] init];
+  svc.opaque = disableBlurSwitch.on;
+  NAModalSheet *sheet = [[NAModalSheet alloc] initWithViewController:svc presentationStyle:NAModalSheetPresentationStyleSlideInFromTop];
+  sheet.disableBlurredBackground = disableBlurSwitch.on;
+  sheet.delegate = self;
+  sheet.backgroundProcessingBlock = ^(UIImage *image) {
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.01);
+    return [[UIImage imageWithData:imageData] blurredImage:0.1];
+  };
+  svc.modalSheet = sheet;
+  [sheet presentWithCompletion:^{
+      
   }];
 }
 
