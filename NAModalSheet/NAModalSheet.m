@@ -97,6 +97,7 @@ static NSMutableArray *modalSheets = nil;
   {
     _animationDuration = kViewAnimationDuration;
     _presentationStyle = style;
+    _presentationRect = CGRectZero;
     childContentVC = vc;
     prevWindow = [[UIApplication sharedApplication] keyWindow];
     self.backgroundTintColor = [UIColor colorWithWhite:0.0 alpha:0.4];
@@ -117,8 +118,19 @@ static NSMutableArray *modalSheets = nil;
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-  // Adjust all frames for the new orientation
-  [self adjustFramesForBounds:self.view.bounds contentSize:childView.frame.size animated:NO];
+  BOOL handled = NO;
+  if (self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize
+      && [self.delegate respondsToSelector:@selector(modalSheet:willAnimateRotationToInterfaceOrientation:)])
+  {
+    // Depend on the delegate to position the sheet
+    handled = [self.delegate modalSheet:self willAnimateRotationToInterfaceOrientation:toInterfaceOrientation];
+  }
+  
+  if (!handled)
+  {
+    // Adjust all frames for the new orientation
+    [self adjustFramesForBounds:self.view.bounds contentSize:childView.frame.size animated:NO];
+  }
 
   if (!self.disableBlurredBackground)
   {
@@ -143,10 +155,12 @@ static NSMutableArray *modalSheets = nil;
 
 - (void)adjustFramesForBounds:(CGRect)mainBounds contentSize:(CGSize)contentSize
 {
+  NSAssert(self.presentationStyle != NAModalSheetPresentationStyleFixedPositionAndSize || CGSizeEqualToSize(contentSize, _presentationRect.size), @"Sizes don't match when adjusting frames and using fixed position and size for modal sheet in %s", __PRETTY_FUNCTION__);
+  
   CGFloat insetFromEdge = self.slideInset;
   
   // If full justification was specified, change the contentSize so the width fills the screen
-  if (self.horizontalJustification == NAModalSheetHorizontalJustificationFull)
+  if (self.horizontalJustification == NAModalSheetHorizontalJustificationFull && self.presentationStyle != NAModalSheetPresentationStyleFixedPositionAndSize)
   {
     contentSize.width = CGRectGetWidth(mainBounds);
   }
@@ -214,6 +228,10 @@ static NSMutableArray *modalSheets = nil;
   {
     childContainerRect.origin.y = CGRectGetMidY(tintRect) - roundf(0.5 * contentSize.height);
   }
+  else if (self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize)
+  {
+    childContainerRect.origin = _presentationRect.origin;
+  }
   else if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
   {
     childContainerRect.origin.y = CGRectGetMaxY(tintRect) - contentSize.height;
@@ -253,10 +271,10 @@ static NSMutableArray *modalSheets = nil;
   
   childView.frame = childContainer.bounds;
   
-  [self adjustHiddenRectsForBounds:mainBounds contentSize:contentSize];
+  [self adjustHiddenRectsForBounds:mainBounds];
 }
 
-- (void)adjustHiddenRectsForBounds:(CGRect)mainBounds contentSize:(CGSize)contentSize
+- (void)adjustHiddenRectsForBounds:(CGRect)mainBounds
 {
   childHiddenFrame = childContainer.frame;
   if (self.presentationStyle == NAModalSheetPresentationStyleSlideInFromBottom || self.presentationStyle == NAModalSheetPresentationStyleSlideInFromUnderToolbar)
@@ -321,8 +339,14 @@ static NSMutableArray *modalSheets = nil;
   [self addChildViewController:childContentVC];
   childView =childContentVC.view;
   
-  childContainer = [[UIView alloc] initWithFrame:childView.bounds];
-  if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered)
+  CGRect childBounds = childView.bounds;
+  if (self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize && !CGRectIsEmpty(self.presentationRect))
+  {
+    childBounds.size = self.presentationRect.size;
+  }
+  childContainer = [[UIView alloc] initWithFrame:childBounds];
+  if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered
+      || self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize)
   {
     childContainer.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
   }
@@ -368,7 +392,7 @@ static NSMutableArray *modalSheets = nil;
   
   CGRect mainBounds = [self mainBoundsForOrientation:self.interfaceOrientation];
   self.view.frame = mainBounds;
-  [self adjustFramesForBounds:mainBounds contentSize:childView.frame.size];
+  [self adjustFramesForBounds:mainBounds contentSize:childBounds.size];
 }
 
 - (CGRect)mainBoundsForOrientation:(UIInterfaceOrientation)orientation
@@ -410,7 +434,20 @@ static NSMutableArray *modalSheets = nil;
 
 -(void)adjustContentSize:(CGSize)newSize animated:(BOOL)animated
 {
+  if (self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize)
+  {
+    _presentationRect.size = newSize;
+  }
   [self adjustFramesForBounds:self.view.bounds contentSize:newSize animated:YES];
+}
+
+-(void)setPresentationRect:(CGRect)presentationRect
+{
+  _presentationRect = presentationRect;
+  if ([self isViewLoaded])
+  {
+    [self adjustFramesForBounds:self.view.bounds contentSize:_presentationRect.size];
+  }
 }
 
 -(void)returningFromBackground:(NSNotification*)notification
@@ -458,7 +495,8 @@ static NSMutableArray *modalSheets = nil;
   CGRect blurredBackgroundOrig = blurredBackground.frame;
   blurredBackground.frame = blurHiddenFrame;
   
-  if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered)
+  if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered
+      || self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize)
   {
     self.view.alpha = 0.0;
     backgroundTint.alpha = 1.0;
@@ -510,7 +548,8 @@ static NSMutableArray *modalSheets = nil;
                      childContainer.frame = childHiddenFrame;
                      blurredBackground.frame = blurHiddenFrame;
                      backgroundTint.alpha = 0.0;
-                     if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered)
+                     if (self.presentationStyle == NAModalSheetPresentationStyleFadeInCentered
+                         || self.presentationStyle == NAModalSheetPresentationStyleFixedPositionAndSize)
                      {
                        self.view.alpha = 0.0;
                      }
@@ -526,6 +565,10 @@ static NSMutableArray *modalSheets = nil;
                      // restore prev window key status
                      [prevWindow makeKeyAndVisible];
                      
+                     if ([self.delegate respondsToSelector:@selector(modalSheetDismissed:)])
+                     {
+                       [self.delegate modalSheetDismissed:self];
+                     }
                      if (completion)
                      {
                        completion();

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE6B079119A4B8FA007A613F /* SampleTooltipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6B079019A4B8FA007A613F /* SampleTooltipViewController.m */; };
+		BE6B079319A4B90F007A613F /* SampleTooltipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BE6B079219A4B90F007A613F /* SampleTooltipViewController.xib */; };
 		BED007EB1841396200634561 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED007EA1841396200634561 /* Foundation.framework */; };
 		BED007ED1841396200634561 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED007EC1841396200634561 /* CoreGraphics.framework */; };
 		BED007EF1841396200634561 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED007EE1841396200634561 /* UIKit.framework */; };
@@ -27,6 +29,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE6B078F19A4B8FA007A613F /* SampleTooltipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleTooltipViewController.h; sourceTree = "<group>"; };
+		BE6B079019A4B8FA007A613F /* SampleTooltipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleTooltipViewController.m; sourceTree = "<group>"; };
+		BE6B079219A4B90F007A613F /* SampleTooltipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SampleTooltipViewController.xib; sourceTree = "<group>"; };
 		BED007E71841396200634561 /* NAModalSheetDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NAModalSheetDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BED007EA1841396200634561 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BED007EC1841396200634561 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -124,6 +129,9 @@
 				BED0082E18413AFB00634561 /* SampleBottomSheetViewController.h */,
 				BED0082F18413AFB00634561 /* SampleBottomSheetViewController.m */,
 				BED0083018413AFB00634561 /* SampleBottomSheetViewController.xib */,
+				BE6B078F19A4B8FA007A613F /* SampleTooltipViewController.h */,
+				BE6B079019A4B8FA007A613F /* SampleTooltipViewController.m */,
+				BE6B079219A4B90F007A613F /* SampleTooltipViewController.xib */,
 				BED008021841396200634561 /* Images.xcassets */,
 				BED007F11841396200634561 /* Supporting Files */,
 			);
@@ -208,6 +216,7 @@
 			files = (
 				BED00823184139CC00634561 /* SampleSheetViewController.xib in Resources */,
 				BED008031841396200634561 /* Images.xcassets in Resources */,
+				BE6B079319A4B90F007A613F /* SampleTooltipViewController.xib in Resources */,
 				BED0083218413AFB00634561 /* SampleBottomSheetViewController.xib in Resources */,
 				BED007F51841396200634561 /* InfoPlist.strings in Resources */,
 				BED007FE1841396200634561 /* Main.storyboard in Resources */,
@@ -227,6 +236,7 @@
 				BED0082D184139DB00634561 /* UIImage+screenshot.m in Sources */,
 				BED008011841396200634561 /* ViewController.m in Sources */,
 				BED007FB1841396200634561 /* AppDelegate.m in Sources */,
+				BE6B079119A4B8FA007A613F /* SampleTooltipViewController.m in Sources */,
 				BED007F71841396200634561 /* main.m in Sources */,
 				BED0082B184139DB00634561 /* NAModalSheet.m in Sources */,
 			);
