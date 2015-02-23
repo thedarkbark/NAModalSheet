@@ -12,7 +12,7 @@ Use [CocoaPods](http://cocoapods.org) and add NAModalSheet to your project.
 * Add a pod entry for NAModalSheet to your Podfile:
 
 ```
-pod 'NAModalSheet', '~> 0.0.1'
+pod 'NAModalSheet', '~> 0.1.2'
 ```	
 
 * Install the pod(s) by running:
