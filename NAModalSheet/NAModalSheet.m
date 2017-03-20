@@ -559,8 +559,11 @@ static NSMutableArray *modalSheets = nil;
                      myWindow = nil;
                      
                      // remove child view controller
-                     [childContentVC.view removeFromSuperview];
-                     [childContentVC removeFromParentViewController];
+                       [childContentVC willMoveToParentViewController:nil];
+                       [childContentVC.view removeFromSuperview];
+                       [childContentVC removeFromParentViewController];
+                       [childContentVC didMoveToParentViewController:nil];
+                       childContentVC = nil;
                      
                      // restore prev window key status
                      [prevWindow makeKeyAndVisible];
