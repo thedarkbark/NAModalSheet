@@ -1,4 +1,4 @@
-##NAModalSheet
+# NAModalSheet
 
 NAModalSheet presents your view controller with a blurred image of the background behind it - tested on iOS 6 and 7, but should be deployable on iOS 5.
 
@@ -21,7 +21,7 @@ pod 'NAModalSheet', '~> 0.1.2'
 pod install
 ```
 
-###Usage
+## Usage
 
 * __You should link with the Accelerate.framework when using NAModalSheet__
 
@@ -44,7 +44,7 @@ Specify an inset value before presenting if using a sliding presentation style. 
 
 The view you present should be translucent to allow the blurred background image to show through. White at 50% opacity works well.
 
-###Credits
+## Credits
 
 The box blur code was presented publicly in a blog post on IndieAmbitions.com:
 
